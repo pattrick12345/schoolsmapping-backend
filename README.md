@@ -1,44 +1,72 @@
-# Lab 8 — Thai School Directory
+# Thai Schools API
 
-Contents:
+A REST API built with **FastAPI** and **SQLite** for retrieving school information in Thailand. This backend powers the Thai Schools Mapping frontend.
 
-- `school_directory.db`: complete SQLite DB (77 provinces, 930 districts, 7,452 subdistricts, 28,840 schools).
-- `backend/main.py`: working, read-only FastAPI endpoints.
-- `backend/requirements.txt`: Python dependencies.
-- `source_data/`: CSV + JSON originals for rerunning import.
+## Features
 
-## WSL Ubuntu setup
+- Retrieve a list of schools.
+- Search and paginate school records.
+- Retrieve detailed information about a specific school.
+- Retrieve school location coordinates.
+- Retrieve province information.
+- Store school records in an SQLite database.
+
+## Tech Stack
+
+- Python
+- FastAPI
+- Uvicorn
+- SQLite
+- Git and GitHub
+
+
+## Getting Started
+
+### 1. Clone the repository
 
 ```bash
-sudo apt update
-sudo apt install -y sqlite3 python3-venv python3-pip
+git clone YOUR_BACKEND_REPOSITORY_URL
+cd schoolbackend
+```
+
+Replace `YOUR_BACKEND_REPOSITORY_URL` with the URL of this repository.
+
+### 2. Create a virtual environment
+
+```bash
+python -m venv .venv
+```
+
+Activate it on Windows:
+
+```powershell
+.venv\Scripts\activate
+```
+
+### 3. Install dependencies
+
+```bash
+pip install -r backend/requirements.txt
+```
+
+### 4. Run the API
+
+```bash
 cd backend
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-From `backend`, the API finds `../school_directory.db` automatically. Open http://127.0.0.1:8000/docs. Frontend Vite runs on http://localhost:5173.
+The API will be available at:
 
-## Rebuild database (optional)
+- API: http://127.0.0.1:8000
+- Interactive API documentation: http://127.0.0.1:8000/docs
 
-From the package root:
+## Database
 
-```bash
-python3 import_schools.py --data-dir source_data --output school_directory.db
-sqlite3 school_directory.db 'SELECT COUNT(*) FROM schools;'
-```
+The API uses SQLite to store school information in `school_directory.db`.
 
-## Endpoint contract
+By default, the database file is expected to be in the same directory as `main.py`. You can override its location using the `SCHOOLS_DB` environment variable.
 
-- `GET /provinces` => array of ID and names
-- `GET /districts?province_id=1` => array
-- `GET /subdistricts?district_id=1001` => array
-- `GET /schools?keyword=วิทยา&province_id=1&district_id=1001&subdistrict_id=100107&limit=20&offset=0` => **object** `{items, total, limit, offset}`
-- `GET /schools/1` => school record, HTTP 404 if missing
+## Frontend
 
-**Important Lab 7 difference:** this API uses `keyword` (not `search`), and `/schools` returns `{items, total, limit, offset}` (not a plain array).
-You should adapt the Vue state accordingly.
-
-The school `id` is the row sequence starting at 1, not its SMIS code.
+This API is designed to work with the Thai Schools Mapping frontend. Configure the frontend to use the URL of the running backend.
