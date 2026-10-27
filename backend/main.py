@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 DB_PATH = Path(os.getenv('SCHOOLS_DB', str(Path(__file__).resolve().parent / 'school_directory.db')))
 app = FastAPI(title='Thai Schools API - Lab 8')
-app.add_middleware(CORSMiddleware, allow_origins=['http://localhost:5173', 'http://127.0.0.1:5173'], allow_credentials=False, allow_methods=['GET'], allow_headers=['*'])
+app.add_middleware(CORSMiddleware, allow_origins=['http://localhost:5173', 'http://127.0.0.1:5173', 'https://schoolsmapping-frontend.onrender.com'], allow_credentials=False, allow_methods=['GET'], allow_headers=['*'])
 
 def connect():
     db=sqlite3.connect(DB_PATH)
